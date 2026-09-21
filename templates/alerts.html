@@ -1,0 +1,31 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="panel">
+    <div class="panel-heading"><div><p class="eyebrow">Notification Log</p><h1>Alert history</h1></div></div>
+    {% if alerts %}
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Date</th><th>Channels</th><th>Contacts</th><th>Message</th><th>Status</th></tr></thead>
+                <tbody>
+                    {% for alert in alerts %}
+                        <tr>
+                            <td>{{ alert.created_at|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ alert.channels }}</td>
+                            <td>{{ alert.phone }}<br>{{ alert.alternate_phone }}<br>{{ alert.email }}</td>
+                            <td>{{ alert.message }}</td>
+                            <td>
+                                <span class="status {% if alert.status == 'sent' %}safe{% elif alert.status == 'failed' %}danger{% else %}warn{% endif %}">
+                                    {{ alert.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="muted">No alerts yet. Alerts appear here when your cylinder is within the warning window.</p>
+    {% endif %}
+</section>
+{% endblock %}

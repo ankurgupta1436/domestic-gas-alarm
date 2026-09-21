@@ -1,0 +1,46 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-grid">
+    <article class="panel level-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Current Gas Level</p>
+                <h1>{{ gas.current_percent }}%</h1>
+            </div>
+            <span class="status {% if gas.days_left <= profile.alert_days_before and gas.started %}danger{% else %}safe{% endif %}">
+                {% if gas.days_left <= profile.alert_days_before and gas.started %}Alert Window{% else %}Normal{% endif %}
+            </span>
+        </div>
+        <div class="meter" aria-label="gas level"><span style="width: {{ gas.current_percent }}%"></span></div>
+        <div class="stats">
+            <div><strong>{{ gas.current_kg }} kg</strong><span>Remaining</span></div>
+            <div><strong>{{ gas.current_day }}</strong><span>Current Day</span></div>
+            <div><strong>{{ gas.days_left }}</strong><span>Days Left</span></div>
+        </div>
+        <div class="timeline">
+            <div><span>Start Date</span><strong>{{ gas.start_date|default:"Not started" }}</strong></div>
+            <div><span>Expected Finish</span><strong>{{ gas.empty_date|default:"Not calculated" }}</strong></div>
+            <div><span>Alert Starts</span><strong>{{ profile.alert_days_before }} days before finish</strong></div>
+        </div>
+        <p class="muted">{{ gas.source }}</p>
+    </article>
+    <article class="panel">
+        <h2>Start Tracking</h2>
+        <form action="{% url 'start' %}" method="post" class="form-panel compact">
+            {% csrf_token %}
+            <label>Start date<input type="date" name="start_date" value="{{ gas.start_date|date:'Y-m-d' }}"></label>
+            <label>Cylinder weight in kg<input type="number" name="initial_kg" value="{{ gas.initial_kg }}" min="1" step="0.1"></label>
+            <label>Empty after days<input type="number" name="total_days" value="{{ gas.total_days }}" min="1"></label>
+            <button type="submit">Start</button>
+        </form>
+    </article>
+    <article class="panel">
+        <h2>Alert Contact</h2>
+        <div class="contact-card"><span>Primary Phone</span><strong>{{ profile.phone|default:"Not set" }}</strong></div>
+        <div class="contact-card"><span>Alternate Phone</span><strong>{{ profile.alternate_phone|default:"Not set" }}</strong></div>
+        <div class="contact-card"><span>Email</span><strong>{{ profile.alert_email|default:"Not set" }}</strong></div>
+        <p class="muted small-text"><a class="text-link" href="{% url 'contacts' %}">Update contacts</a></p>
+    </article>
+</section>
+{% endblock %}

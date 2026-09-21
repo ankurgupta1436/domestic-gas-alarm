@@ -1,0 +1,49 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Domestic Gas Alarm</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{% url 'dashboard' %}">Domestic Gas Alarm</a>
+        <div class="nav-actions">
+            {% if user.is_authenticated %}
+                <nav>
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                    <a href="{% url 'contacts' %}">Contacts</a>
+                    <a href="{% url 'alerts' %}">Alerts</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </nav>
+            {% endif %}
+            <button class="theme-toggle" type="button" id="themeToggle">Dark</button>
+        </div>
+    </header>
+    <main class="shell">
+        {% if messages %}
+            <section class="flash-list">
+                {% for message in messages %}
+                    <div class="flash {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </section>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer>Domestic Gas Alarm &copy; {{ current_year }}</footer>
+    <script>
+        const savedTheme = localStorage.getItem("theme") || "light";
+        const button = document.getElementById("themeToggle");
+        document.documentElement.dataset.theme = savedTheme;
+        button.textContent = savedTheme === "dark" ? "Light" : "Dark";
+        button.addEventListener("click", () => {
+            const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+            document.documentElement.dataset.theme = nextTheme;
+            localStorage.setItem("theme", nextTheme);
+            button.textContent = nextTheme === "dark" ? "Light" : "Dark";
+        });
+    </script>
+</body>
+</html>

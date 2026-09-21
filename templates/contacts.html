@@ -1,0 +1,19 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="narrow">
+    <article class="panel">
+        <p class="eyebrow">Alert Settings</p>
+        <h1>Manage contact details</h1>
+        <p class="muted">Each account stores its own contacts. Alerts are emailed (and optionally SMS'd) to these details when days left reach your warning window.</p>
+        <form method="post" class="form-panel">
+            {% csrf_token %}
+            <label>Primary phone number<input name="phone" value="{{ profile.phone }}" placeholder="+91 9876543210"></label>
+            <label>Alternate phone number<input name="alternate_phone" value="{{ profile.alternate_phone }}" placeholder="+91 9123456789"></label>
+            <label>Email address<input type="email" name="email" value="{{ profile.alert_email }}" required></label>
+            <label>Alert days before empty<input type="number" name="alert_days_before" value="{{ profile.alert_days_before }}" min="0" max="30" required></label>
+            <button type="submit">Save Contacts</button>
+        </form>
+    </article>
+</section>
+{% endblock %}
