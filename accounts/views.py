@@ -30,7 +30,7 @@ def dashboard(request):
     cylinder = get_active_cylinder(request.user)
     gas = calculate_gas_status(cylinder)
     profile = get_or_create_profile(request.user)
-    process_user_alerts(request.user)
+    #process_user_alerts(request.user)
 
     return render(
         request,
@@ -60,7 +60,7 @@ def start_tracking_view(request):
         return redirect("dashboard")
 
     start_tracking(request.user, start_date, initial_kg, total_days)
-    process_user_alerts(request.user)
+    #process_user_alerts(request.user)
     messages.success(request, "Gas usage tracking started.")
     return redirect("dashboard")
 
