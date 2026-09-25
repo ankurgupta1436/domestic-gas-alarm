@@ -139,6 +139,7 @@ def home_view(request):
 def health_view(request):
     return JsonResponse({"status": "ok"})
 
+import threading
 
 @csrf_exempt
 def check_alerts_cron(request):
@@ -148,8 +149,28 @@ def check_alerts_cron(request):
     if not expected or provided != expected:
         return HttpResponseForbidden("Invalid or missing cron secret.")
 
-    created = 0
-    for user in User.objects.filter(is_active=True):
-        if process_user_alerts(user):
-            created += 1
-    return HttpResponse(f"Alerts created: {created}")
+    def run_alerts():
+        for user in User.objects.filter(is_active=True):
+            try:
+                process_user_alerts(user)
+            except Exception:
+                pass
+
+    thread = threading.Thread(target=run_alerts, daemon=True)
+    thread.start()
+
+    return HttpResponse("OK")
+
+# @csrf_exempt
+# def check_alerts_cron(request):
+    """Free-tier scheduled alerts: ping this URL from cron-job.org."""
+    expected = settings.CRON_SECRET
+    provided = request.headers.get("X-Cron-Secret") or request.GET.get("secret", "")
+    # if not expected or provided != expected:
+        # return HttpResponseForbidden("Invalid or missing cron secret.")
+
+    # created = 0
+    # for user in User.objects.filter(is_active=True):
+        # if process_user_alerts(user):
+            # created += 1
+    # return HttpResponse(f"Alerts created: {created}")
