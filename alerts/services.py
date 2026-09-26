@@ -41,7 +41,7 @@ def send_email_alert(recipient: str, subject: str, message: str) -> AlertDeliver
             message=message,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[recipient],
-            fail_silently=True,       #fail_silently=False,
+            fail_silently=False,       #fail_silently=False,
         )
         return AlertDeliveryStatus.SENT
     except Exception:
