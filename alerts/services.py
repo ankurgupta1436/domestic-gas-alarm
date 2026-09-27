@@ -150,3 +150,24 @@ def process_user_alerts(user) -> Alert | None:
     profile, _ = UserProfile.objects.get_or_create(user=user)
     cylinder = user.cylinders.filter(is_active=True).first()
     return send_alert_if_needed(user, cylinder, profile)
+
+
+
+
+import resend
+
+def send_email_alert(recipient, subject, message):
+    if not recipient:
+        return AlertDeliveryStatus.SKIPPED
+    try:
+        resend.api_key = settings.RESEND_API_KEY
+        resend.Emails.send({
+            "from": "Domestic Gas Alarm <onboarding@resend.dev>",
+            "to": [recipient],
+            "subject": subject,
+            "text": message,
+        })
+        return AlertDeliveryStatus.SENT
+    except Exception as e:
+        logger.error("Email FAILED: %s", e)
+        return AlertDeliveryStatus.FAILED
