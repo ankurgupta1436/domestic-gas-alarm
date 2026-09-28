@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+ 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -156,3 +158,5 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = os.environ.get("SECURE_SSL_REDIRECT", "True").lower() == "true"
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")  
+

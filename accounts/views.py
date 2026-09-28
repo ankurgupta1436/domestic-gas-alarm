@@ -163,9 +163,9 @@ def check_alerts_cron(request):
 
 # @csrf_exempt
 # def check_alerts_cron(request):
-    """Free-tier scheduled alerts: ping this URL from cron-job.org."""
-    expected = settings.CRON_SECRET
-    provided = request.headers.get("X-Cron-Secret") or request.GET.get("secret", "")
+    #"""Free-tier scheduled alerts: ping this URL from cron-job.org."""
+    #expected = settings.CRON_SECRET
+    #provided = request.headers.get("X-Cron-Secret") or request.GET.get("secret", "")
     # if not expected or provided != expected:
         # return HttpResponseForbidden("Invalid or missing cron secret.")
 
