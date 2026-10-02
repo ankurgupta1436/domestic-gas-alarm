@@ -6,6 +6,10 @@
     <title>Domestic Gas Alarm</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script>
+        const savedTheme = localStorage.getItem("theme") || "light";
+        document.documentElement.dataset.theme = savedTheme;
+    </script>
 </head>
 <body>
     <header class="topbar">
@@ -16,6 +20,7 @@
                     <a href="{% url 'dashboard' %}">Dashboard</a>
                     <a href="{% url 'contacts' %}">Contacts</a>
                     <a href="{% url 'alerts' %}">Alerts</a>
+                    <span class="muted small-text">Hi, <strong>{{ request.user.username }}</strong><span>
                     <a href="{% url 'logout' %}">Logout</a>
                 </nav>
             {% endif %}
@@ -34,16 +39,31 @@
     </main>
     <footer>Domestic Gas Alarm &copy; {{ current_year }}</footer>
     <script>
-        const savedTheme = localStorage.getItem("theme") || "light";
         const button = document.getElementById("themeToggle");
-        document.documentElement.dataset.theme = savedTheme;
-        button.textContent = savedTheme === "dark" ? "Light" : "Dark";
-        button.addEventListener("click", () => {
-            const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-            document.documentElement.dataset.theme = nextTheme;
-            localStorage.setItem("theme", nextTheme);
-            button.textContent = nextTheme === "dark" ? "Light" : "Dark";
-        });
+    button.textContent = document.documentElement.dataset.theme === "dark" ? "Light" : "Dark";
+    button.addEventListener("click", () => {
+        const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = nextTheme;
+        localStorage.setItem("theme", nextTheme);
+        button.textContent = nextTheme === "dark" ? "Light" : "Dark";
+    });    
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+<!-- const savedTheme = localStorage.getItem("theme") || "light"; -->
+        <!-- const button = document.getElementById("themeToggle"); -->
+        <!-- document.documentElement.dataset.theme = savedTheme; -->
+        <!-- button.textContent = savedTheme === "dark" ? "Light" : "Dark"; -->
+        <!-- button.addEventListener("click", () => { -->
+            <!-- const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; -->
+            <!-- document.documentElement.dataset.theme = nextTheme; -->
+            <!-- localStorage.setItem("theme", nextTheme); -->
+            <!-- button.textContent = nextTheme === "dark" ? "Light" : "Dark"; -->
+        <!-- }); -->
